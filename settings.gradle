@@ -1,0 +1,1 @@
+include ':app', ':harry-annotations', ':harry-compiler', ':harry-core', ':harry-ec'
