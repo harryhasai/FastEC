@@ -1,16 +1,13 @@
 package com.harry.fastec;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
+import com.harry.harry_core.activities.ProxyActivity;
+import com.harry.harry_core.delegates.LatteDelegate;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ProxyActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Log.i("666", "onCreate: ");
+    public LatteDelegate setRootDelegate() {
+        return new MainDelegate();
     }
+
 }
