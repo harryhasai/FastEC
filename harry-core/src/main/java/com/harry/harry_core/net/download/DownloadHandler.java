@@ -1,5 +1,7 @@
 package com.harry.harry_core.net.download;
 
+import android.os.AsyncTask;
+
 import com.harry.harry_core.net.RestCreator;
 import com.harry.harry_core.net.callback.IError;
 import com.harry.harry_core.net.callback.IFailure;
@@ -55,12 +57,28 @@ public class DownloadHandler {
         RestCreator.getRestService().download(URL, PARAMS).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    final ResponseBody body = response.body();
+                    final SaveFileTask task = new SaveFileTask(REQUEST, SUCCESS);
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, DOWNLOAD_DIR, EXTENSION, body, NAME);
 
+                    if (task.isCancelled()) {
+                        if (REQUEST != null) {
+                            REQUEST.onRequestEnd();
+                        }
+                    }
+                } else {
+                    if (ERROR != null) {
+                        ERROR.onError(response.code(), response.message());
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                if (FAILURE != null) {
+                    FAILURE.onFailure();
+                }
             }
         });
     }
