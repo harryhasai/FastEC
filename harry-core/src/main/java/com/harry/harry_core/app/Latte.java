@@ -14,7 +14,15 @@ public final class Latte {
         return Configurator.getInstance();
     }
 
-    private static WeakHashMap<String, Object> getConfiguration() {
+    public static Configurator getConfigurator() {
+        return Configurator.getInstance();
+    }
+
+    public static WeakHashMap<String, Object> getConfiguration() {
         return Configurator.getInstance().getLatteConfigs();
+    }
+
+    public static Context getApplication() {
+        return (Context) getConfiguration().get(ConfigType.APPLICATION_CONTEXT.name());
     }
 }
