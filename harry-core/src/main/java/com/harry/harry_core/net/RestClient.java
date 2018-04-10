@@ -7,6 +7,7 @@ import com.harry.harry_core.net.callback.IFailure;
 import com.harry.harry_core.net.callback.IRequest;
 import com.harry.harry_core.net.callback.ISuccess;
 import com.harry.harry_core.net.callback.RequestCallbacks;
+import com.harry.harry_core.net.download.DownloadHandler;
 import com.harry.harry_core.ui.LatteLoader;
 import com.harry.harry_core.ui.LoaderStyle;
 
@@ -38,6 +39,10 @@ public class RestClient {
 
     private final File FILE;
 
+    private final String DOWNLOAD_DIR;
+    private final String EXTENSION;
+    private final String NAME;
+
     RestClient(String url,
                Map<String, Object> params,
                IRequest request,
@@ -47,7 +52,7 @@ public class RestClient {
                RequestBody body,
                Context context,
                LoaderStyle loaderStyle,
-               File file) {
+               File file, String download_dir, String extension, String name) {
         this.URL = url;
         PARAMS.putAll(params);
         this.REQUEST = request;
@@ -58,6 +63,9 @@ public class RestClient {
         this.CONTEXT = context;
         this.LOADER_STYLE = loaderStyle;
         this.FILE = file;
+        this.DOWNLOAD_DIR = download_dir;
+        this.EXTENSION = extension;
+        this.NAME = name;
     }
 
     public static RestClientBuilder builder() {
@@ -141,6 +149,10 @@ public class RestClient {
 
     public final void delete() {
         request(HttpMethod.DELETE);
+    }
+
+    public final void download() {
+        new DownloadHandler(URL, REQUEST, SUCCESS, FAILURE, ERROR, DOWNLOAD_DIR, EXTENSION, NAME).handleDownload();
     }
 
 }
